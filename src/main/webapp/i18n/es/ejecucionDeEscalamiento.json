@@ -1,0 +1,25 @@
+{
+  "oncallApp": {
+    "ejecucionDeEscalamiento": {
+      "home": {
+        "title": "Ejecucion De Escalamientos",
+        "refreshListLabel": "Refrescar lista",
+        "notFound": "Ningún Ejecucion De Escalamientos encontrado"
+      },
+      "detail": {
+        "title": "Ejecucion De Escalamiento"
+      },
+      "id": "ID",
+      "vuelta": "Vuelta",
+      "nivel": "Nivel",
+      "motivo": "Motivo",
+      "resultado": "Resultado",
+      "ejecutadoEn": "Ejecutado En",
+      "proximoEn": "Proximo En",
+      "detalle": "Detalle",
+      "incidente": "Incidente",
+      "paso": "Paso",
+      "destinatario": "Destinatario"
+    }
+  }
+}

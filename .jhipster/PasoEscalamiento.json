@@ -53,6 +53,13 @@
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "ejecucionDeEscalamiento",
+      "otherEntityRelationshipName": "paso",
+      "relationshipName": "ejecucion",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",

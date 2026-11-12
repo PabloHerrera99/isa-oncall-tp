@@ -76,6 +76,13 @@
       "relationshipType": "one-to-many"
     },
     {
+      "otherEntityName": "despliegueDeServicio",
+      "otherEntityRelationshipName": "servicio",
+      "relationshipName": "despliegue",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
       "otherEntityName": "incidente",
       "otherEntityRelationshipName": "servicio",
       "relationshipName": "incidente",

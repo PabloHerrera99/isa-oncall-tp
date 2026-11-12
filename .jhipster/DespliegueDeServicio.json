@@ -1,0 +1,77 @@
+{
+  "annotations": {
+    "changelogDate": "20261112155211"
+  },
+  "applications": ["oncall"],
+  "documentation": "La llegada concreta de un cambio a un servicio. Lo que se correlaciona\\ncon un incidente es el despliegue, no el cambio en abstracto.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "version",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "60"
+    },
+    {
+      "fieldName": "entorno",
+      "fieldType": "Entorno",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PRODUCCION,STAGING,DESARROLLO"
+    },
+    {
+      "fieldName": "iniciadoEn",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "finalizadoEn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "resultado",
+      "fieldType": "ResultadoDespliegue",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_CURSO,EXITOSO,FALLIDO,REVERTIDO"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "DespliegueDeServicio",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "titulo",
+      "otherEntityName": "cambio",
+      "otherEntityRelationshipName": "despliegue",
+      "relationshipName": "cambio",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "nombre",
+      "otherEntityName": "servicio",
+      "otherEntityRelationshipName": "despliegue",
+      "relationshipName": "servicio",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "ejecutadoPor",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "correlacionCambioIncidente",
+      "otherEntityRelationshipName": "despliegue",
+      "relationshipName": "correlacion",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

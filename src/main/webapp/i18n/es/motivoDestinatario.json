@@ -1,0 +1,11 @@
+{
+  "oncallApp": {
+    "MotivoDestinatario": {
+      "null": "",
+      "AUTOR_DEL_CAMBIO": "AUTOR_DEL_CAMBIO",
+      "DESTINATARIO_DIRECTO": "DESTINATARIO_DIRECTO",
+      "GUARDIA": "GUARDIA",
+      "NINGUNO": "NINGUNO"
+    }
+  }
+}

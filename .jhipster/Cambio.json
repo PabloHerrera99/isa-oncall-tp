@@ -1,0 +1,68 @@
+{
+  "annotations": {
+    "changelogDate": "20261112155210"
+  },
+  "applications": ["oncall"],
+  "documentation": "Un cambio planificado sobre produccion: codigo, configuracion,\\ninfraestructura o esquema de base. Su autor es a quien se escala\\nprimero si el cambio queda correlacionado con un incidente.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "titulo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "140"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "2000"
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "TipoCambio",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CODIGO,CONFIGURACION,INFRAESTRUCTURA,BASE_DE_DATOS"
+    },
+    {
+      "fieldName": "riesgo",
+      "fieldType": "NivelRiesgo",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "BAJO,MEDIO,ALTO"
+    },
+    {
+      "fieldName": "ticketUrl",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "fieldName": "creadoEn",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Cambio",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "autor",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "despliegueDeServicio",
+      "otherEntityRelationshipName": "cambio",
+      "relationshipName": "despliegue",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

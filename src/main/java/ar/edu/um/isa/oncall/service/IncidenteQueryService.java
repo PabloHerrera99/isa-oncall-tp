@@ -91,6 +91,7 @@ public class IncidenteQueryService extends QueryService<Incidente> {
                     buildRangeSpecification(criteria.getResueltoEn(), Incidente_.resueltoEn),
                     buildRangeSpecification(criteria.getUsuariosAfectados(), Incidente_.usuariosAfectados),
                     buildSpecification(criteria.getCumplioObjetivo(), Incidente_.cumplioObjetivo),
+                    buildRangeSpecification(criteria.getSilenciadoHasta(), Incidente_.silenciadoHasta),
                     buildSpecification(criteria.getComandanteId(), root -> root.join(Incidente_.comandante, JoinType.LEFT).get(User_.id)),
                     buildSpecification(criteria.getServicioId(), root -> root.join(Incidente_.servicios, JoinType.LEFT).get(Servicio_.id)),
                     buildSpecification(criteria.getPostmortemId(), root ->
@@ -102,6 +103,12 @@ public class IncidenteQueryService extends QueryService<Incidente> {
                     ),
                     buildSpecification(criteria.getNotificacionId(), root ->
                         root.join(Incidente_.notificacions, JoinType.LEFT).get(Notificacion_.id)
+                    ),
+                    buildSpecification(criteria.getCorrelacionId(), root ->
+                        root.join(Incidente_.correlacions, JoinType.LEFT).get(CorrelacionCambioIncidente_.id)
+                    ),
+                    buildSpecification(criteria.getEjecucionDeEscalamientoId(), root ->
+                        root.join(Incidente_.ejecucionDeEscalamientos, JoinType.LEFT).get(EjecucionDeEscalamiento_.id)
                     )
                 )
             );

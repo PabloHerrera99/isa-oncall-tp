@@ -72,6 +72,26 @@ const routes: Routes = [
     loadChildren: () => import('./accion-correctiva/accion-correctiva.routes'),
   },
   {
+    path: 'cambio',
+    data: { pageTitle: 'oncallApp.cambio.home.title' },
+    loadChildren: () => import('./cambio/cambio.routes'),
+  },
+  {
+    path: 'despliegue-de-servicio',
+    data: { pageTitle: 'oncallApp.despliegueDeServicio.home.title' },
+    loadChildren: () => import('./despliegue-de-servicio/despliegue-de-servicio.routes'),
+  },
+  {
+    path: 'correlacion-cambio-incidente',
+    data: { pageTitle: 'oncallApp.correlacionCambioIncidente.home.title' },
+    loadChildren: () => import('./correlacion-cambio-incidente/correlacion-cambio-incidente.routes'),
+  },
+  {
+    path: 'ejecucion-de-escalamiento',
+    data: { pageTitle: 'oncallApp.ejecucionDeEscalamiento.home.title' },
+    loadChildren: () => import('./ejecucion-de-escalamiento/ejecucion-de-escalamiento.routes'),
+  },
+  {
     path: 'user-management',
     data: { pageTitle: 'userManagement.home.title' },
     loadChildren: () => import('./admin/user-management/user-management.routes'),

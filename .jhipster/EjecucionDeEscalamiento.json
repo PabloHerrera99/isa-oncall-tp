@@ -1,0 +1,83 @@
+{
+  "annotations": {
+    "changelogDate": "20261112155213",
+    "readOnly": true
+  },
+  "applications": ["oncall"],
+  "documentation": "Cada escalon que la cadena de escalamiento ejecuto sobre un incidente.\\nEs la auditoria del escalamiento y tambien su memoria: el proceso que\\ndespierta mira la ultima fila para saber por donde va.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "vuelta",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "5",
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "nivel",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "10",
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "motivo",
+      "fieldType": "MotivoDestinatario",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "AUTOR_DEL_CAMBIO,DESTINATARIO_DIRECTO,GUARDIA,NINGUNO"
+    },
+    {
+      "fieldName": "resultado",
+      "fieldType": "ResultadoEscalamiento",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NOTIFICADO,SIN_DESTINATARIO,SIN_POLITICA,AGOTADO"
+    },
+    {
+      "fieldName": "ejecutadoEn",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "proximoEn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "detalle",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    }
+  ],
+  "name": "EjecucionDeEscalamiento",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "titulo",
+      "otherEntityName": "incidente",
+      "otherEntityRelationshipName": "ejecucionDeEscalamiento",
+      "relationshipName": "incidente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "orden",
+      "otherEntityName": "pasoEscalamiento",
+      "otherEntityRelationshipName": "ejecucion",
+      "relationshipName": "paso",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "destinatario",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

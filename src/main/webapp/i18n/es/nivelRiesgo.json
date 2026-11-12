@@ -1,0 +1,10 @@
+{
+  "oncallApp": {
+    "NivelRiesgo": {
+      "null": "",
+      "BAJO": "BAJO",
+      "MEDIO": "MEDIO",
+      "ALTO": "ALTO"
+    }
+  }
+}

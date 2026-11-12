@@ -1,0 +1,71 @@
+{
+  "annotations": {
+    "changelogDate": "20261112155212"
+  },
+  "applications": ["oncall"],
+  "documentation": "Sospecha (o certeza) de que un despliegue causo un incidente.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "origen",
+      "fieldType": "OrigenCorrelacion",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "AUTOMATICA,MANUAL"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoCorrelacion",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SUGERIDA,CONFIRMADA,DESCARTADA"
+    },
+    {
+      "fieldName": "detectadaEn",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "minutosEntreDespliegueEIncidente",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "nota",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "CorrelacionCambioIncidente",
+  "relationships": [
+    {
+      "otherEntityField": "titulo",
+      "otherEntityName": "incidente",
+      "otherEntityRelationshipName": "correlacion",
+      "relationshipName": "incidente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "version",
+      "otherEntityName": "despliegueDeServicio",
+      "otherEntityRelationshipName": "correlacion",
+      "relationshipName": "despliegue",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "confirmadaPor",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

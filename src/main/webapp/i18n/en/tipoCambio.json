@@ -1,0 +1,11 @@
+{
+  "oncallApp": {
+    "TipoCambio": {
+      "null": "",
+      "CODIGO": "CODIGO",
+      "CONFIGURACION": "CONFIGURACION",
+      "INFRAESTRUCTURA": "INFRAESTRUCTURA",
+      "BASE_DE_DATOS": "BASE_DE_DATOS"
+    }
+  }
+}

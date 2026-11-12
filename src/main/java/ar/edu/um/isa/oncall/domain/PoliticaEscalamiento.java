@@ -46,12 +46,12 @@ public class PoliticaEscalamiento implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "equipo", "objetivos", "alertas", "politicas", "incidentes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "equipo", "objetivos", "alertas", "politicas", "despliegues", "incidentes" }, allowSetters = true)
     private Servicio servicio;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "politica")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "politica", "rotacion", "destinatarioDirecto" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "politica", "rotacion", "destinatarioDirecto", "ejecucions" }, allowSetters = true)
     private Set<PasoEscalamiento> pasos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

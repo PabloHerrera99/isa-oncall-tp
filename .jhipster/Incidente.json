@@ -56,6 +56,10 @@
     {
       "fieldName": "cumplioObjetivo",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "silenciadoHasta",
+      "fieldType": "Instant"
     }
   ],
   "jpaMetamodelFiltering": true,
@@ -103,6 +107,20 @@
       "otherEntityName": "notificacion",
       "otherEntityRelationshipName": "incidente",
       "relationshipName": "notificacion",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "correlacionCambioIncidente",
+      "otherEntityRelationshipName": "incidente",
+      "relationshipName": "correlacion",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "ejecucionDeEscalamiento",
+      "otherEntityRelationshipName": "incidente",
+      "relationshipName": "ejecucionDeEscalamiento",
       "relationshipSide": "right",
       "relationshipType": "one-to-many"
     }

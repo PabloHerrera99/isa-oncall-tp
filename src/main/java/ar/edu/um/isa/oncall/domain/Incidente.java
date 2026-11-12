@@ -71,6 +71,9 @@ public class Incidente implements Serializable {
     @Column(name = "cumplio_objetivo")
     private Boolean cumplioObjetivo;
 
+    @Column(name = "silenciado_hasta")
+    private Instant silenciadoHasta;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User comandante;
 
@@ -81,7 +84,7 @@ public class Incidente implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "servicio_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "equipo", "objetivos", "alertas", "politicas", "incidentes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "equipo", "objetivos", "alertas", "politicas", "despliegues", "incidentes" }, allowSetters = true)
     private Set<Servicio> servicios = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "incidente", "accions" }, allowSetters = true)
@@ -102,6 +105,16 @@ public class Incidente implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "incidente", "destinatario" }, allowSetters = true)
     private Set<Notificacion> notificacions = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "incidente")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "incidente", "despliegue", "confirmadaPor" }, allowSetters = true)
+    private Set<CorrelacionCambioIncidente> correlacions = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "incidente")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "incidente", "paso", "destinatario" }, allowSetters = true)
+    private Set<EjecucionDeEscalamiento> ejecucionDeEscalamientos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -246,6 +259,19 @@ public class Incidente implements Serializable {
 
     public void setCumplioObjetivo(Boolean cumplioObjetivo) {
         this.cumplioObjetivo = cumplioObjetivo;
+    }
+
+    public Instant getSilenciadoHasta() {
+        return this.silenciadoHasta;
+    }
+
+    public Incidente silenciadoHasta(Instant silenciadoHasta) {
+        this.setSilenciadoHasta(silenciadoHasta);
+        return this;
+    }
+
+    public void setSilenciadoHasta(Instant silenciadoHasta) {
+        this.silenciadoHasta = silenciadoHasta;
     }
 
     public User getComandante() {
@@ -396,6 +422,68 @@ public class Incidente implements Serializable {
         return this;
     }
 
+    public Set<CorrelacionCambioIncidente> getCorrelacions() {
+        return this.correlacions;
+    }
+
+    public void setCorrelacions(Set<CorrelacionCambioIncidente> correlacionCambioIncidentes) {
+        if (this.correlacions != null) {
+            this.correlacions.forEach(i -> i.setIncidente(null));
+        }
+        if (correlacionCambioIncidentes != null) {
+            correlacionCambioIncidentes.forEach(i -> i.setIncidente(this));
+        }
+        this.correlacions = correlacionCambioIncidentes;
+    }
+
+    public Incidente correlacions(Set<CorrelacionCambioIncidente> correlacionCambioIncidentes) {
+        this.setCorrelacions(correlacionCambioIncidentes);
+        return this;
+    }
+
+    public Incidente addCorrelacion(CorrelacionCambioIncidente correlacionCambioIncidente) {
+        this.correlacions.add(correlacionCambioIncidente);
+        correlacionCambioIncidente.setIncidente(this);
+        return this;
+    }
+
+    public Incidente removeCorrelacion(CorrelacionCambioIncidente correlacionCambioIncidente) {
+        this.correlacions.remove(correlacionCambioIncidente);
+        correlacionCambioIncidente.setIncidente(null);
+        return this;
+    }
+
+    public Set<EjecucionDeEscalamiento> getEjecucionDeEscalamientos() {
+        return this.ejecucionDeEscalamientos;
+    }
+
+    public void setEjecucionDeEscalamientos(Set<EjecucionDeEscalamiento> ejecucionDeEscalamientos) {
+        if (this.ejecucionDeEscalamientos != null) {
+            this.ejecucionDeEscalamientos.forEach(i -> i.setIncidente(null));
+        }
+        if (ejecucionDeEscalamientos != null) {
+            ejecucionDeEscalamientos.forEach(i -> i.setIncidente(this));
+        }
+        this.ejecucionDeEscalamientos = ejecucionDeEscalamientos;
+    }
+
+    public Incidente ejecucionDeEscalamientos(Set<EjecucionDeEscalamiento> ejecucionDeEscalamientos) {
+        this.setEjecucionDeEscalamientos(ejecucionDeEscalamientos);
+        return this;
+    }
+
+    public Incidente addEjecucionDeEscalamiento(EjecucionDeEscalamiento ejecucionDeEscalamiento) {
+        this.ejecucionDeEscalamientos.add(ejecucionDeEscalamiento);
+        ejecucionDeEscalamiento.setIncidente(this);
+        return this;
+    }
+
+    public Incidente removeEjecucionDeEscalamiento(EjecucionDeEscalamiento ejecucionDeEscalamiento) {
+        this.ejecucionDeEscalamientos.remove(ejecucionDeEscalamiento);
+        ejecucionDeEscalamiento.setIncidente(null);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -430,6 +518,7 @@ public class Incidente implements Serializable {
             ", resueltoEn='" + getResueltoEn() + "'" +
             ", usuariosAfectados=" + getUsuariosAfectados() +
             ", cumplioObjetivo='" + getCumplioObjetivo() + "'" +
+            ", silenciadoHasta='" + getSilenciadoHasta() + "'" +
             "}";
     }
 }
