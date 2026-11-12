@@ -114,6 +114,7 @@ entity Incidente {
   resueltoEn Instant
   usuariosAfectados Integer min(0)
   cumplioObjetivo Boolean
+  silenciadoHasta Instant
 }
 
 /**
@@ -247,6 +248,89 @@ enum EstadoAccion {
 }
 
 // ---------------------------------------------------------------------
+// 5 · GESTION DE CAMBIOS  ·  que se toco antes de que se rompiera
+// ---------------------------------------------------------------------
+
+/**
+ * Un cambio planificado sobre produccion: codigo, configuracion,
+ * infraestructura o esquema de base. Su autor es a quien se escala
+ * primero si el cambio queda correlacionado con un incidente.
+ */
+entity Cambio {
+  titulo String required maxlength(140)
+  descripcion String maxlength(2000)
+  tipo TipoCambio required
+  riesgo NivelRiesgo required
+  ticketUrl String maxlength(255)
+  creadoEn Instant required
+}
+
+/**
+ * La llegada concreta de un cambio a un servicio. Lo que se correlaciona
+ * con un incidente es el despliegue, no el cambio en abstracto.
+ */
+entity DespliegueDeServicio {
+  version String required maxlength(60)
+  entorno Entorno required
+  iniciadoEn Instant required
+  finalizadoEn Instant
+  resultado ResultadoDespliegue required
+}
+
+/**
+ * Sospecha (o certeza) de que un despliegue causo un incidente.
+ */
+entity CorrelacionCambioIncidente {
+  origen OrigenCorrelacion required
+  estado EstadoCorrelacion required
+  detectadaEn Instant required
+  minutosEntreDespliegueEIncidente Integer min(0)
+  nota String maxlength(500)
+}
+/**
+ * Cada escalon que la cadena de escalamiento ejecuto sobre un incidente.
+ * Es la auditoria del escalamiento y tambien su memoria: el proceso que
+ * despierta mira la ultima fila para saber por donde va.
+ */
+@readOnly
+entity EjecucionDeEscalamiento {
+  vuelta Integer required min(0) max(5)
+  nivel Integer required min(0) max(10)
+  motivo MotivoDestinatario required
+  resultado ResultadoEscalamiento required
+  ejecutadoEn Instant required
+  proximoEn Instant
+  detalle String maxlength(500)
+}
+
+enum MotivoDestinatario {
+  AUTOR_DEL_CAMBIO, DESTINATARIO_DIRECTO, GUARDIA, NINGUNO
+}
+
+enum ResultadoEscalamiento {
+  NOTIFICADO, SIN_DESTINATARIO, SIN_POLITICA, AGOTADO
+}
+enum TipoCambio {
+  CODIGO, CONFIGURACION, INFRAESTRUCTURA, BASE_DE_DATOS
+}
+
+enum NivelRiesgo {
+  BAJO, MEDIO, ALTO
+}
+
+enum ResultadoDespliegue {
+  EN_CURSO, EXITOSO, FALLIDO, REVERTIDO
+}
+
+enum OrigenCorrelacion {
+  AUTOMATICA, MANUAL
+}
+
+enum EstadoCorrelacion {
+  SUGERIDA, CONFIRMADA, DESCARTADA
+}
+
+// ---------------------------------------------------------------------
 // RELACIONES
 // ---------------------------------------------------------------------
 
@@ -266,6 +350,13 @@ relationship ManyToOne {
 
   Notificacion{incidente(titulo) required} to Incidente{notificacion}
   AccionCorrectiva{postmortem(titulo) required} to Postmortem{accion}
+
+  DespliegueDeServicio{cambio(titulo) required} to Cambio{despliegue}
+  DespliegueDeServicio{servicio(nombre) required} to Servicio{despliegue}
+  CorrelacionCambioIncidente{incidente(titulo) required} to Incidente{correlacion}
+  CorrelacionCambioIncidente{despliegue(version) required} to DespliegueDeServicio{correlacion}
+  EjecucionDeEscalamiento{incidente(titulo) required} to Incidente{ejecucionDeEscalamiento}
+  EjecucionDeEscalamiento{paso(orden)} to PasoEscalamiento{ejecucion}
 }
 
 /**
@@ -291,6 +382,10 @@ relationship ManyToOne {
   PasoEscalamiento{destinatarioDirecto(login)} to User with builtInEntity
   Notificacion{destinatario(login) required} to User with builtInEntity
   AccionCorrectiva{responsable(login)} to User with builtInEntity
+  Cambio{autor(login) required} to User with builtInEntity
+  DespliegueDeServicio{ejecutadoPor(login)} to User with builtInEntity
+  CorrelacionCambioIncidente{confirmadaPor(login)} to User with builtInEntity
+  EjecucionDeEscalamiento{destinatario(login)} to User with builtInEntity
 }
 
 // ---------------------------------------------------------------------
@@ -300,7 +395,7 @@ relationship ManyToOne {
 dto * with mapstruct
 service all with serviceClass
 
-paginate Incidente, Alerta, Postmortem with pagination
-paginate EventoDeIncidente, Notificacion, TurnoDeGuardia with infinite-scroll
+paginate Incidente, Alerta, Postmortem, Cambio with pagination
+paginate EventoDeIncidente, Notificacion, TurnoDeGuardia, DespliegueDeServicio, EjecucionDeEscalamiento with infinite-scroll
 
-filter Incidente, Alerta, Servicio, Notificacion
+filter Incidente, Alerta, Servicio, Notificacion, Cambio, DespliegueDeServicio, CorrelacionCambioIncidente
