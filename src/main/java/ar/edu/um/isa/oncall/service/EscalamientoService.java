@@ -295,6 +295,8 @@ public class EscalamientoService {
         return correlaciones
             .stream()
             .filter(c -> c.getEstado() != EstadoCorrelacion.DESCARTADA)
+            .filter(c -> !c.getDespliegue().getIniciadoEn().isAfter(incidente.getDetectadoEn()))
+            .filter(c -> c.getDespliegue().getCambio().getAutor().isActivated())
             .sorted(
                 Comparator.<CorrelacionCambioIncidente>comparingInt(c ->
                     c.getEstado() == EstadoCorrelacion.CONFIRMADA ? 0 : 1
